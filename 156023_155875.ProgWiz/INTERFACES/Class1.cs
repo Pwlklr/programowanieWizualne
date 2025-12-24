@@ -19,6 +19,7 @@ namespace INTERFACES
         int ProducerId { get; set; }
         string Name { get; set; }
         int ProductionYear { get; set; }
+        double Size { get; set; }
         ClosureType Closure { get; set; }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using BL;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
+using BL;
+using DAOMock;
 
 namespace WPF
 {
@@ -19,6 +23,10 @@ namespace WPF
         public MainWindow()
         {
             InitializeComponent();
+
+            var dao = new DAOMock.DAOMock();
+            var viewModel = new MainViewModel(dao);
+            this.DataContext = viewModel;
         }
     }
 }

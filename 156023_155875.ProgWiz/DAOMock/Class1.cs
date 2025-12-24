@@ -21,6 +21,7 @@ namespace DAOMock
         public int ProducerId { get; set; }
         public string Name { get; set; }
         public int ProductionYear { get; set; }
+        public double Size { get; set; }
         public ClosureType Closure { get; set; }
     }
 

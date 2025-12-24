@@ -4,9 +4,79 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
+        xmlns:core="clr-namespace:CORE;assembly=CORE"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Katalog Butów Wspinaczkowych" Height="450" Width="800">
 
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="HeaderStyle">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Provider do pobrania wartości z Enuma ClosureType -->
+        <ObjectDataProvider x:Key="ClosureTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="core:ClosureType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Lista butów -->
+        <ListView Grid.Column="0" 
+                  ItemsSource="{Binding Shoes}" 
+                  SelectedItem="{Binding SelectedShoe}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Model" DisplayMemberBinding="{Binding Name}" Width="150"/>
+                    <GridViewColumn Header="Rozm." DisplayMemberBinding="{Binding Size}" Width="50"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Szczegóły -->
+        <StackPanel Grid.Column="1" Margin="20,0,0,0" DataContext="{Binding SelectedShoe}">
+            <TextBlock Text="Szczegóły Buta" FontSize="20" Margin="0,0,0,20"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Nazwa:" Style="{StaticResource HeaderStyle}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Rozmiar:" Style="{StaticResource HeaderStyle}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Size, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Zapięcie:" Style="{StaticResource HeaderStyle}"/>
+                <!-- ComboBox zbindowany z Enumem -->
+                <ComboBox Grid.Row="2" Grid.Column="1" 
+                          ItemsSource="{Binding Source={StaticResource ClosureTypes}}"
+                          SelectedItem="{Binding Closure}"
+                          Margin="0,0,0,10"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0" 
+                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}">
+                <TextBlock Text="Producent: " FontWeight="Bold"/>
+                <TextBlock Text="{Binding SelectedProducerName}" Foreground="Blue"/>
+            </StackPanel>
+
+        </StackPanel>
     </Grid>
 </Window>
