@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CORE\CORE.csproj" />
+    <ProjectReference Include="..\DAOMock\DAOMock.csproj" />
+    <ProjectReference Include="..\INTERFACES\INTERFACES.csproj" />
+  </ItemGroup>
+
 </Project>
