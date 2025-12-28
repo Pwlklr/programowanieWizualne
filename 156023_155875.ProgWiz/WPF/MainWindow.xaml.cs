@@ -1,32 +1,33 @@
-﻿using BL;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using _156023_155875.ProgWiz.BL;
+using _156023_155875.ProgWiz.INTERFACES;
 
-using BL;
-using DAOMock;
-
-namespace WPF
+namespace _156023_155875.ProgWiz.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private MainViewModel _viewModel;
+
+        private IDataAccessObject _dao;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            var dao = new DAOMock.DAOMock();
-            var viewModel = new MainViewModel(dao);
-            this.DataContext = viewModel;
+            _dao = new DAOMock.DAOMock();
+            _viewModel = new MainViewModel(_dao);
+            this.DataContext = _viewModel;
+        }
+
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var addWin = new AddWindow(_dao);
+            bool? result = addWin.ShowDialog();
+
+            if (result == true)
+            {
+                _viewModel.RefreshData();
+            }
         }
     }
 }
