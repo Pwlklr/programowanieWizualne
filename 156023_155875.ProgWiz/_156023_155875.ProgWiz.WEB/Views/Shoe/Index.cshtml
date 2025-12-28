@@ -1,0 +1,46 @@
+﻿@using _156023_155875.ProgWiz.INTERFACES
+@model IEnumerable<IClimbingShoe>
+
+@{
+    ViewData["Title"] = "Katalog Butów";
+    var producers = ViewBag.Producers as IEnumerable<IProducer>;
+}
+
+<h1>Katalog Butów Wspinaczkowych</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Dodaj Nowy But</a>
+    <a asp-controller="Producer" asp-action="Create" class="btn btn-secondary" style="margin-left: 10px;">Dodaj Producenta</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Producent</th>
+            <th>Rozmiar</th>
+            <th>Rok Prod.</th>
+            <th>Zapięcie</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var producerName = producers?.FirstOrDefault(p => p.Id == item.ProducerId)?.Name ?? "Nieznany";
+            <tr>
+                <td>@item.Name</td>
+                <td style="font-weight: bold; color: #0056b3;">@producerName</td>
+                <td>@item.Size</td>
+                <td>@item.ProductionYear</td>
+                <td>@item.Closure</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edytuj</a>
+
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Czy na pewno chcesz usunąć ten model?');">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

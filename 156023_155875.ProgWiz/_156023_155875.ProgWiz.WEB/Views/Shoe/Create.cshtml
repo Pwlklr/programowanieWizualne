@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Dodaj Buta";
+    var producers = ViewBag.Producers as IEnumerable<_156023_155875.ProgWiz.INTERFACES.IProducer>;
+}
+
+<h1>Dodaj Nowy But</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Producent</label>
+        <select name="producerId" class="form-control">
+            @foreach (var p in producers)
+            {
+                <option value="@p.Id">@p.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Nazwa modelu</label>
+        <input name="name" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Rozmiar</label>
+        <input name="size" type="number" step="0.5" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Rok produkcji</label>
+        <input name="year" type="number" class="form-control" value="2024" />
+    </div>
+    <div class="form-group">
+        <label>Zapięcie</label>
+        <select name="closure" class="form-control">
+            <option value="0">Sznurowane (LaceUp)</option>
+            <option value="1">Rzep (Velcro)</option>
+            <option value="2">Wsuwane (Slipper)</option>
+        </select>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-success">Zapisz</button>
+</form>
