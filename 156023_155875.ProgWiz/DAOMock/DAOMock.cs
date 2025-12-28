@@ -59,5 +59,15 @@ namespace _156023_155875.ProgWiz.DAOMock
             producer.Id = newId;
             _producers.Add(producer);
         }
+        public void UpdateShoe(IClimbingShoe shoe)
+        {
+            var existing = _shoes.FirstOrDefault(s => s.Id == shoe.Id);
+            if (existing != null)
+            {
+                existing.Name = shoe.Name;
+                existing.Size = shoe.Size;
+                existing.Closure = shoe.Closure;
+            }
+        }
     }
 }

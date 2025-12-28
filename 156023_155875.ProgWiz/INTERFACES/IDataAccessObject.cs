@@ -16,5 +16,6 @@ namespace _156023_155875.ProgWiz.INTERFACES
         void AddShoe(IClimbingShoe shoe);
         void RemoveShoe(int id);
         void AddProducer(IProducer producer);
+        void UpdateShoe(IClimbingShoe shoe);
     }
 }

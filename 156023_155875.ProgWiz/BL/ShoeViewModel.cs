@@ -21,7 +21,11 @@ namespace _156023_155875.ProgWiz.BL
         public string Name
         {
             get => _shoe.Name;
-            set { _shoe.Name = value; OnPropertyChanged(); }
+            set
+            {
+                _shoe.Name = value;
+                OnPropertyChanged();
+            }
         }
 
         public double Size
@@ -34,6 +38,10 @@ namespace _156023_155875.ProgWiz.BL
         {
             get => _shoe.Closure;
             set { _shoe.Closure = value; OnPropertyChanged(); }
+        }
+        public IClimbingShoe GetModel()
+        {
+            return _shoe;
         }
 
         public int ProducerId => _shoe.ProducerId;

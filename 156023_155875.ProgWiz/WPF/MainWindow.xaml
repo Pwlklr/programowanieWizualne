@@ -50,14 +50,31 @@
                 </ListView.View>
             </ListView>
 
-            <StackPanel Grid.Column="1" Margin="20,0,0,0" DataContext="{Binding SelectedShoe}">
-                <TextBlock Text="Szczegóły Wybranego Buta" FontSize="20" Margin="0,0,0,20"/>
-                <Grid IsEnabled="{Binding Converter={x:Null}, FallbackValue=False, TargetNullValue=False}">
+            <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                <StackPanel.DataContext>
+                    <Binding Path="SelectedShoe"/>
+                </StackPanel.DataContext>
+
+                <TextBlock Text="Szczegóły / Edycja" FontSize="20" Margin="0,0,0,20"/>
+
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -71,13 +88,20 @@
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Zapięcie:" Style="{StaticResource HeaderStyle}"/>
                     <ComboBox Grid.Row="2" Grid.Column="1" 
-                              ItemsSource="{Binding Source={StaticResource ClosureTypes}}"
-                              SelectedItem="{Binding Closure}"
-                              Margin="0,0,0,10"/>
+                          ItemsSource="{Binding Source={StaticResource ClosureTypes}}"
+                          SelectedItem="{Binding Closure}"
+                          Margin="0,0,0,10"/>
+
+                    <Button Grid.Row="3" Grid.Column="1" 
+                        Content="Zapisz Zmiany" 
+                        Height="30" 
+                        Command="{Binding DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                        HorizontalAlignment="Right"
+                        Width="120"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0" 
-                            DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}">
+                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}">
                     <TextBlock Text="Producent: " FontWeight="Bold"/>
                     <TextBlock Text="{Binding SelectedProducerName}" Foreground="Blue"/>
                 </StackPanel>

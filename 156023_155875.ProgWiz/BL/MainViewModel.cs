@@ -23,6 +23,7 @@ namespace _156023_155875.ProgWiz.BL
 
         public ICommand DeleteCommand { get; private set; }
 
+        public ICommand UpdateCommand { get; private set; }
         public string FilterText
         {
             get => _filterText;
@@ -66,6 +67,10 @@ namespace _156023_155875.ProgWiz.BL
                 param => DeleteSelected(),
                 param => SelectedShoe != null
             );
+            UpdateCommand = new RelayCommand(
+                param => UpdateSelected(),
+                param => SelectedShoe != null
+            );
         }
 
         private void LoadShoes()
@@ -99,6 +104,14 @@ namespace _156023_155875.ProgWiz.BL
                 _dao.RemoveShoe(SelectedShoe.Id);
                 Shoes.Remove(SelectedShoe);
                 SelectedShoe = null;
+            }
+        }
+        private void UpdateSelected()
+        {
+            if (SelectedShoe != null)
+            {
+                _dao.UpdateShoe(SelectedShoe.GetModel());
+
             }
         }
 
