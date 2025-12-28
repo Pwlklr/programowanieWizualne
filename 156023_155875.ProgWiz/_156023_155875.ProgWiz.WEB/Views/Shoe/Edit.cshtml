@@ -1,53 +1,61 @@
-﻿@using _156023_155875.ProgWiz.INTERFACES
-@using _156023_155875.ProgWiz.CORE
-@model IClimbingShoe
+﻿@using _156023_155875.ProgWiz.CORE
+@model WebShoeDto
 
 @{
     ViewData["Title"] = "Edycja Buta";
-    var producers = ViewBag.Producers as IEnumerable<IProducer>;
+    var producers = ViewBag.Producers as IEnumerable<_156023_155875.ProgWiz.INTERFACES.IProducer>;
 }
 
 <h1>Edytuj Buta</h1>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit" method="post">
-            <input type="hidden" name="id" value="@Model.Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label class="control-label">Producent</label>
-                <select name="producerId" class="form-control">
-                    @foreach (var p in producers)
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="ProducerId" class="control-label">Producent</label>
+                <select asp-for="ProducerId" class="form-control">
+                    <option value="">-- Wybierz producenta --</option>
+                    @if (producers != null)
                     {
-                        <!option value="@p.Id" @(p.Id == Model.ProducerId ? "selected" : "")>@p.Name</!option>
+                        foreach (var p in producers)
+                        {
+                            <option value="@p.Id">@p.Name</option>
+                        }
                     }
                 </select>
+                <span asp-validation-for="ProducerId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Nazwa modelu</label>
-                <input name="name" class="form-control" value="@Model.Name" required />
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label">Nazwa modelu</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Rozmiar</label>
-                <input name="size" type="number" step="0.5" class="form-control" value="@Model.Size" required />
+            <div class="form-group mb-3">
+                <label asp-for="Size" class="control-label">Rozmiar</label>
+                <input asp-for="Size" class="form-control" type="number" step="0.5" />
+                <span asp-validation-for="Size" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Rok produkcji</label>
-                <input name="year" type="number" class="form-control" value="@Model.ProductionYear" />
+            <div class="form-group mb-3">
+                <label asp-for="ProductionYear" class="control-label">Rok produkcji</label>
+                <input asp-for="ProductionYear" class="form-control" />
+                <span asp-validation-for="ProductionYear" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Zapięcie</label>
-                <select name="closure" class="form-control">
-                    <!option value="0" @(Model.Closure == ClosureType.LaceUp ? "selected" : "")>Sznurowane (LaceUp)</!option>
-                    <!option value="1" @(Model.Closure == ClosureType.Velcro ? "selected" : "")>Rzep (Velcro)</!option>
-                    <!option value="2" @(Model.Closure == ClosureType.Slipper ? "selected" : "")>Wsuwane (Slipper)</!option>
+            <div class="form-group mb-3">
+                <label asp-for="Closure" class="control-label">Typ zapięcia</label>
+                <select asp-for="Closure" class="form-control"
+                        asp-items="Html.GetEnumSelectList<ClosureType>()">
                 </select>
+                <span asp-validation-for="Closure" class="text-danger"></span>
             </div>
-            <br />
+
             <div class="form-group">
                 <input type="submit" value="Zapisz Zmiany" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
@@ -55,3 +63,9 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

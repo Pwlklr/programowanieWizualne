@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using _156023_155875.ProgWiz.INTERFACES;
-using _156023_155875.ProgWiz.CORE;
-using _156023_155875.ProgWiz.DAOSQL; 
+﻿using _156023_155875.ProgWiz.INTERFACES;
+using Microsoft.AspNetCore.Mvc;
 
 namespace _156023_155875.ProgWiz.WEB.Controllers
 {
@@ -21,27 +19,25 @@ namespace _156023_155875.ProgWiz.WEB.Controllers
             return View(shoes);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Producers = _dao.GetAllProducers();
-            return View();
+            return View(new WebShoeDto()); 
         }
 
         [HttpPost]
-        public IActionResult Create(string name, int size, int year, int producerId, ClosureType closure)
+        public IActionResult Create(WebShoeDto model)
         {
-            var newShoe = new ShoeEntity
+            if (ModelState.IsValid)
             {
-                Name = name,
-                Size = size,
-                ProductionYear = year,
-                ProducerId = producerId,
-                Closure = closure
-            };
+                _dao.AddShoe(model);
+                return RedirectToAction("Index");
+            }
 
-            _dao.AddShoe(newShoe);
+            ViewBag.Producers = _dao.GetAllProducers();
 
-            return RedirectToAction("Index");
+            return View(model);
         }
 
         public IActionResult Delete(int id)
@@ -53,33 +49,36 @@ namespace _156023_155875.ProgWiz.WEB.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var shoe = _dao.GetAllShoes().FirstOrDefault(s => s.Id == id);
+            var shoeFromDb = _dao.GetAllShoes().FirstOrDefault(s => s.Id == id);
 
-            if (shoe == null) return NotFound();
+            if (shoeFromDb == null) return NotFound();
+
+            var model = new WebShoeDto
+            {
+                Id = shoeFromDb.Id,
+                Name = shoeFromDb.Name,
+                Size = shoeFromDb.Size,
+                ProductionYear = shoeFromDb.ProductionYear,
+                ProducerId = shoeFromDb.ProducerId,
+                Closure = shoeFromDb.Closure
+            };
 
             ViewBag.Producers = _dao.GetAllProducers();
-            return View(shoe); 
+
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, string name, int size, int year, int producerId, ClosureType closure)
+        public IActionResult Edit(WebShoeDto model)
         {
-            var updatedShoe = new ShoeEntity
+            if (ModelState.IsValid)
             {
-                Id = id,
-                Name = name,
-                Size = size,
-                ProductionYear = year,
-                ProducerId = producerId,
-                Closure = closure
-            };
+                _dao.UpdateShoe(model);
+                return RedirectToAction("Index");
+            }
 
-            _dao.UpdateShoe(updatedShoe);
-
-            return RedirectToAction("Index");
+            ViewBag.Producers = _dao.GetAllProducers();
+            return View(model);
         }
     }
-
-
-
 }

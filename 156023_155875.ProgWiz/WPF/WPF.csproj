@@ -14,11 +14,12 @@
     <ProjectReference Include="..\INTERFACES\INTERFACES.csproj" />
   </ItemGroup>
 <Target Name="CopyDAO" AfterTargets="Build">
-    <Message Text="Kopiowanie WSZYSTKICH bibliotek DAO..." Importance="high" />
+    <Message Text="Kopiowanie bibliotek DAO..." Importance="high" />
     <ItemGroup>
-        <DaoFiles Include="..\DAOSQL\bin\Debug\net9.0\**\*.*" />
+        <DaoFiles Include="..\DAOSQL\bin\Debug\net9.0\*.dll" />
+        <DaoFiles Include="..\DAOMock\bin\Debug\net9.0\*.dll" />
+        <DaoFiles Include="..\156023_155875.ProgWiz.DAOFile\bin\Debug\net9.0\*.dll" /> 
     </ItemGroup>
-    <Copy SourceFiles="@(DaoFiles)" DestinationFiles="@(DaoFiles->'$(OutputPath)%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
-
+    <Copy SourceFiles="@(DaoFiles)" DestinationFolder="$(OutputPath)" />
+</Target>
 </Project>

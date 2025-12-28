@@ -7,7 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IDataAccessObject, DAOSQL>();
+var dllPath = builder.Configuration["DaoSettings:Path"];
+var className = builder.Configuration["DaoSettings:Class"];
+
+var assembly = System.Reflection.Assembly.LoadFrom(dllPath);
+var type = assembly.GetType(className);
+var daoInstance = Activator.CreateInstance(type) as IDataAccessObject;
+
+builder.Services.AddSingleton(daoInstance);
 
 
 var app = builder.Build();

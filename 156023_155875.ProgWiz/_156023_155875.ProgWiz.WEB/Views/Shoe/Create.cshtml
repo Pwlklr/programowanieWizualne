@@ -1,40 +1,69 @@
-﻿@{
+﻿@using _156023_155875.ProgWiz.CORE
+@model WebShoeDto
+
+@{
     ViewData["Title"] = "Dodaj Buta";
     var producers = ViewBag.Producers as IEnumerable<_156023_155875.ProgWiz.INTERFACES.IProducer>;
 }
 
 <h1>Dodaj Nowy But</h1>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label>Producent</label>
-        <select name="producerId" class="form-control">
-            @foreach (var p in producers)
-            {
-                <option value="@p.Id">@p.Name</option>
-            }
-        </select>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ProducerId" class="control-label">Producent</label>
+                <select asp-for="ProducerId" class="form-control">
+                    <option value="">-- Wybierz producenta --</option>
+                    @if (producers != null)
+                    {
+                        foreach (var p in producers)
+                        {
+                            <option value="@p.Id">@p.Name</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="ProducerId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label">Nazwa modelu</label>
+                <input asp-for="Name" class="form-control" placeholder="Np. Solution" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Size" class="control-label">Rozmiar</label>
+                <input asp-for="Size" class="form-control" type="number" step="0.5" />
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ProductionYear" class="control-label">Rok produkcji</label>
+                <input asp-for="ProductionYear" class="form-control" value="@DateTime.Now.Year" />
+                <span asp-validation-for="ProductionYear" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Closure" class="control-label">Typ zapięcia</label>
+                <select asp-for="Closure" class="form-control"
+                        asp-items="Html.GetEnumSelectList<ClosureType>()">
+                </select>
+                <span asp-validation-for="Closure" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary">Powrót</a>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label>Nazwa modelu</label>
-        <input name="name" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Rozmiar</label>
-        <input name="size" type="number" step="0.5" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Rok produkcji</label>
-        <input name="year" type="number" class="form-control" value="2024" />
-    </div>
-    <div class="form-group">
-        <label>Zapięcie</label>
-        <select name="closure" class="form-control">
-            <option value="0">Sznurowane (LaceUp)</option>
-            <option value="1">Rzep (Velcro)</option>
-            <option value="2">Wsuwane (Slipper)</option>
-        </select>
-    </div>
-    <br />
-    <button type="submit" class="btn btn-success">Zapisz</button>
-</form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -16,4 +16,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+	<Target Name="CopyDAO" AfterTargets="Build">
+    <Message Text="Kopiowanie bibliotek DAO do folderu WEB..." Importance="high" />
+    <ItemGroup>
+      <DaoFiles Include="..\DAOSQL\bin\Debug\net9.0\*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DaoFiles)" DestinationFolder="$(OutputPath)" />
+  </Target>
 </Project>
